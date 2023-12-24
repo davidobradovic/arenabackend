@@ -1,0 +1,208 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Administrators {
+  id Int @id @default(autoincrement())
+
+  username String
+  password String
+
+  security_code Int
+
+  role Int @default(1)
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt @default(now())
+}
+
+model CarBrands {
+  id Int @id @default(autoincrement())
+  title String
+  logo String
+
+  cars Cars[]
+  models CarModels[]
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt @default(now())
+}
+
+model CarModels {
+  id Int @id @default(autoincrement())
+  title String
+
+  brand_id Int
+  brand CarBrands @relation(fields: [brand_id], references: [id])
+
+  cars Cars[]
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt @default(now())
+}
+
+model Cars {
+  brand_id Int
+  brand CarModels @relation(fields: [brand_id], references: [id])
+
+  model_id Int
+  model CarBrands @relation(fields: [model_id], references: [id])
+
+  id Int @id @default(autoincrement())
+  title String
+  price Int
+  actionPrice Int @default(0)
+  mileage Int
+  year Int
+
+  engine String
+  power Int
+  horsePowers Int
+
+  weight Int?
+  climate String?  
+  sound String?
+  parkingSenzori String?
+  parkingCamera String?
+
+  interior String?
+  roloZavjese String?
+  lights String?
+  seats Int?
+  transmissionLength String?
+
+  wheels String?
+  numberOfOwners Int?
+  
+  emmisionStandad String?
+
+  yearOfFirstRegistration Int?
+  registeredTo Int?
+
+  warranty Int?
+
+  car_status String @default("Koristeno")
+  advertisement_status String @default("Na lageru")
+
+  doors String @default("4/5")
+
+  type String
+  fuel String
+  transmission String
+  drive String
+  carColor String
+
+  description String?
+
+  views Int @default(0)
+
+  images Images[]
+  specifications Specifications[]
+
+  constacts ContacsForCars[]
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt @default(now())
+}
+
+model Images {
+  id Int @id @default(autoincrement())
+  url String
+  name String
+
+  car_id Int
+  car Cars @relation(fields: [car_id], references: [id])
+}
+
+model Specifications {
+  id Int @id @default(autoincrement())
+  value String
+  have Boolean @default(true)
+
+  car_id Int
+  car Cars @relation(fields: [car_id], references: [id])
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt @default(now())
+}
+
+model ContacsForCars {
+  id Int @id @default(autoincrement())
+
+  fullName String
+  phone String
+  email String
+
+  message String
+
+  car_id Int
+  car Cars @relation(fields: [car_id], references: [id])
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt @default(now())
+}
+
+model WebViews {
+  id Int @id @default(autoincrement())
+  view Int
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt @default(now())
+}
+
+model KomisionaProdaja {
+  id Int @id @default(autoincrement())
+
+  customer_name String
+  customer_phone String
+  customer_email String
+  
+  car_name String
+  car_price Int
+  car_desc String
+
+  images KomisijaImages[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt @default(now())
+}
+
+model KomisijaImages {
+  id Int @id @default(autoincrement())
+
+  url String
+  name String
+
+  kom_id Int
+  komisija KomisionaProdaja @relation(fields: [kom_id], references: [id])
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt @default(now())
+}
+
+model Advertisements {
+  id Int @id @default(autoincrement())
+
+  backgroundImage String
+  
+  title String 
+  description String
+  action String?
+
+  adLink String
+
+  exipration String
+
+  active Boolean @default(false)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt @default(now())
+}

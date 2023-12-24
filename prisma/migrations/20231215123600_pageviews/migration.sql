@@ -1,0 +1,5 @@
+-- CreateTable
+CREATE TABLE "WebViews" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "view" INTEGER NOT NULL
+);

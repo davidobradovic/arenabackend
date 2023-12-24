@@ -1,0 +1,10 @@
+-- CreateTable
+CREATE TABLE "Administrators" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "username" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "security_code" INTEGER NOT NULL,
+    "role" INTEGER NOT NULL DEFAULT 1,
+    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
