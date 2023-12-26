@@ -135,6 +135,24 @@ router.post('/post-vehicle', upload.array('images'), async (req, res, next) => {
     }
 });
 
+router.get('/radnici', async (req, res) => {
+    try {
+        const data = await prisma.administrators.findMany({
+        })
+
+        if (!data) {
+            return res.status(500).json({ error: 'Error creating car data' });
+        }
+
+        // Respond with the created data
+        return res.json(data);
+    } catch (error) {
+        // Handle unexpected errors
+        console.error('Error:', error);
+        return res.status(500).json({ error: 'Internal server error', details: error });
+    }
+})
+
 router.delete('/delete-car/:carID', async (req, res) => {
     try {
         const { carID } = req.params;
