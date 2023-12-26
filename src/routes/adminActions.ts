@@ -117,7 +117,7 @@ router.post('/post-vehicle', upload.array('images'), async (req, res, next) => {
                     create: uploadedFiles || []
                 },
                 specifications: {
-                    create: selectedSpec || []
+                    create: specifications.length > 3 ? selectedSpec : []
                 },
             },
         });
