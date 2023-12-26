@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import multer from 'multer';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { createHash } from 'crypto';
 
 
 const router = express.Router();
@@ -56,7 +57,8 @@ router.post('/post-vehicle', upload.array('images'), async (req, res, next) => {
             car_status,
             advertisement_status,
             description,
-            specifications
+            specifications,
+            creator_id
         } = req.body;
 
         // Check if the specified brand and model exist
@@ -119,6 +121,7 @@ router.post('/post-vehicle', upload.array('images'), async (req, res, next) => {
                 specifications: {
                     create: specifications.length > 3 ? selectedSpec : []
                 },
+                creator: { connect: { id: Number(creator_id) } },
             },
         });
 
@@ -420,5 +423,30 @@ router.put('/api/ad-true-status/:adID', async (req, res) => {
         return res.status(500).json({ error: 'Internal server error', details: error });
     }
 });
+
+router.get('/api/user/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const response = await prisma.administrators.findFirst({
+            where: {
+                id: Number(userId)
+            },
+            include: {
+                cars: true
+            }
+        })
+
+        if (!response) {
+            return res.status(500).json({ error: 'Error creating car response' });
+        }
+
+        // Respond with the created response
+        return res.json(response);
+    } catch (error) {
+        // Handle unexpected errors
+        console.error('Error:', error);
+        return res.status(500).json({ error: 'Internal server error', details: error });
+    }
+})
 
 module.exports = router;

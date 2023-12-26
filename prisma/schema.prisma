@@ -20,8 +20,13 @@ model Administrators {
 
   role Int @default(1)
   
+  cars Cars[]
+
+  worktime Int @default(0)
+
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt @default(now())
+
 }
 
 model CarBrands {
@@ -111,6 +116,9 @@ model Cars {
   
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt @default(now())
+
+  creator_id Int
+  creator Administrators @relation(fields: [creator_id], references: [id])
 }
 
 model Images {
@@ -127,7 +135,7 @@ model Specifications {
   value String
   have Boolean @default(true)
 
-  car_id Int
+  car_id Int @default(1)
   car Cars @relation(fields: [car_id], references: [id])
   
   created_at DateTime @default(now())
